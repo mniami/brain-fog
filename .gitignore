@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+.expo/
+.metro-health-check*
 
 # testing
 /coverage
@@ -14,6 +16,8 @@
 
 # production
 /build
+/dist
+/web-build
 
 # misc
 .DS_Store
@@ -34,3 +38,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+expo-env.d.ts
+
+# generated native folders
+/ios
+/android
