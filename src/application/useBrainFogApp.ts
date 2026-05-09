@@ -38,8 +38,13 @@ export function useBrainFogApp() {
   const [selectedDurationSeconds, setSelectedDurationSeconds] = useState<number>(DEFAULT_TIMER_SECONDS);
   const [tasks, setTasks] = useState<TaskThread[]>([]);
   const [now, setNow] = useState(() => Date.now());
+  const hasOpenTasks = tasks.some((task) => task.status !== 'done');
 
   useEffect(() => {
+    if (!hasOpenTasks) {
+      return;
+    }
+
     const interval = setInterval(() => {
       const currentTime = Date.now();
       setNow(currentTime);
@@ -47,7 +52,7 @@ export function useBrainFogApp() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [hasOpenTasks]);
 
   const activeTasks = useMemo(
     () =>

@@ -23,8 +23,13 @@ export function createTaskThread(
   durationSeconds: number,
   now: number = Date.now(),
 ): TaskThread {
+  const id =
+    typeof globalThis.crypto?.randomUUID === 'function'
+      ? globalThis.crypto.randomUUID()
+      : `${now}-${Math.random().toString(36).slice(2, 8)}`;
+
   return {
-    id: `${now}-${Math.random().toString(36).slice(2, 8)}`,
+    id,
     title: title.trim(),
     createdAt: now,
     dueAt: now + durationSeconds * 1000,
