@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 
-import { formatRemainingTime, type TaskThread } from '../domain/task';
+import { formatDurationLabel, formatRemainingTime, type TaskThread } from '../domain/task';
 import { useBrainFogApp } from '../application/useBrainFogApp';
 
 function ThreadCard({
@@ -173,7 +173,7 @@ export function BrainFogApp() {
               <View key={task.id} style={styles.completedCard}>
                 <Text style={styles.completedCardTitle}>{task.title}</Text>
                 <Text style={styles.completedCardMeta}>
-                  Timer ustawiony na {Math.round(task.durationSeconds / 60) || 1} min.
+                  Timer ustawiony na {formatDurationLabel(task.durationSeconds)}
                 </Text>
               </View>
             ))

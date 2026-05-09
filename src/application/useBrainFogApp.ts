@@ -39,6 +39,14 @@ export function useBrainFogApp() {
   const [tasks, setTasks] = useState<TaskThread[]>([]);
   const [now, setNow] = useState(() => Date.now());
   const hasOpenTasks = tasks.some((task) => task.status !== 'done');
+  const nearestDueInMs = hasOpenTasks
+    ? Math.min(
+        ...tasks
+          .filter((task) => task.status !== 'done')
+          .map((task) => Math.max(0, task.dueAt - now)),
+      )
+    : 0;
+  const tickIntervalMs = nearestDueInMs <= 60_000 ? 1000 : 5000;
 
   useEffect(() => {
     if (!hasOpenTasks) {
@@ -49,10 +57,10 @@ export function useBrainFogApp() {
       const currentTime = Date.now();
       setNow(currentTime);
       setTasks((currentTasks) => syncTaskStatuses(currentTasks, currentTime));
-    }, 1000);
+    }, tickIntervalMs);
 
     return () => clearInterval(interval);
-  }, [hasOpenTasks]);
+  }, [hasOpenTasks, tickIntervalMs]);
 
   const activeTasks = useMemo(
     () =>
