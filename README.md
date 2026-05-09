@@ -43,6 +43,36 @@ You are paying for parking while remembering to call someone back. Brain-Fog kee
 
 ## Installation and Technical Setup
 
-This project is currently in development. It aims to provide a clean, distraction-free environment that works as fast as a thought.
+The repository now contains the first mobile application slice based on the PRD:
+
+- Expo + React Native + TypeScript bootstrap
+- quick text capture for a task
+- micro-timer presets (10 seconds, 1 minute, 3 minutes)
+- always-visible active thread dashboard
+- done and snooze actions on task cards
+
+### Getting started
+
+```bash
+npm install
+npm run start
+```
+
+Useful development commands:
+
+```bash
+npm run web
+npm run typecheck
+```
+
+### Architecture
+
+The current code is split into three layers:
+
+- `src/presentation` — screen and UI components
+- `src/application` — state flow and user actions
+- `src/domain` — task model and timer rules
+
+See `/ARCHITECTURE.md` for the implementation outline and planned next steps.
 
 _Designed for the distracted, by the distracted._
