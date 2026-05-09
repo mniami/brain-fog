@@ -18,6 +18,8 @@ export type TaskThread = {
   status: TaskStatus;
 };
 
+let fallbackIdSequence = 0;
+
 function fallbackUuid() {
   if (typeof globalThis.crypto?.getRandomValues === 'function') {
     const bytes = globalThis.crypto.getRandomValues(new Uint8Array(16));
@@ -35,11 +37,8 @@ function fallbackUuid() {
     ].join('-');
   }
 
-  return `${nowFallback()}-${Math.random().toString(36).slice(2, 10)}`;
-}
-
-function nowFallback() {
-  return Date.now();
+  fallbackIdSequence += 1;
+  return `thread-${Date.now()}-${fallbackIdSequence}`;
 }
 
 export function createTaskThread(

@@ -9,6 +9,10 @@ import {
   SNOOZE_SECONDS,
 } from '../domain/task';
 
+const ONE_MINUTE_MS = 60_000;
+const FAST_TICK_INTERVAL_MS = 1_000;
+const SLOW_TICK_INTERVAL_MS = 5_000;
+
 function syncTaskStatuses(tasks: TaskThread[], now: number) {
   let changed = false;
 
@@ -46,7 +50,8 @@ export function useBrainFogApp() {
           .map((task) => Math.max(0, task.dueAt - now)),
       )
     : 0;
-  const tickIntervalMs = nearestDueInMs <= 60_000 ? 1000 : 5000;
+  const tickIntervalMs =
+    nearestDueInMs <= ONE_MINUTE_MS ? FAST_TICK_INTERVAL_MS : SLOW_TICK_INTERVAL_MS;
 
   useEffect(() => {
     if (!hasOpenTasks) {
