@@ -42,13 +42,13 @@ export function useBrainFogApp() {
   const [selectedDurationSeconds, setSelectedDurationSeconds] = useState<number>(DEFAULT_TIMER_SECONDS);
   const [tasks, setTasks] = useState<TaskThread[]>([]);
   const [now, setNow] = useState(() => Date.now());
-  const hasOpenTasks = tasks.some((task) => task.status !== 'done');
+  const openTasks = useMemo(
+    () => tasks.filter((task) => task.status !== 'done'),
+    [tasks],
+  );
+  const hasOpenTasks = openTasks.length > 0;
   const nearestDueInMs = hasOpenTasks
-    ? Math.min(
-        ...tasks
-          .filter((task) => task.status !== 'done')
-          .map((task) => Math.max(0, task.dueAt - now)),
-      )
+    ? Math.min(...openTasks.map((task) => Math.max(0, task.dueAt - now)))
     : 0;
   const tickIntervalMs =
     nearestDueInMs <= ONE_MINUTE_MS ? FAST_TICK_INTERVAL_MS : SLOW_TICK_INTERVAL_MS;
@@ -68,11 +68,8 @@ export function useBrainFogApp() {
   }, [hasOpenTasks, tickIntervalMs]);
 
   const activeTasks = useMemo(
-    () =>
-      tasks
-        .filter((task) => task.status !== 'done')
-        .sort((left, right) => left.dueAt - right.dueAt),
-    [tasks],
+    () => [...openTasks].sort((left, right) => left.dueAt - right.dueAt),
+    [openTasks],
   );
 
   const completedTasks = useMemo(

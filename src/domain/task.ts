@@ -20,7 +20,7 @@ export type TaskThread = {
 
 let fallbackIdSequence = 0;
 
-function fallbackUuid() {
+function createUuid() {
   if (typeof globalThis.crypto?.getRandomValues === 'function') {
     const bytes = globalThis.crypto.getRandomValues(new Uint8Array(16));
     bytes[6] = (bytes[6] & 0x0f) | 0x40;
@@ -49,7 +49,7 @@ export function createTaskThread(
   const id =
     typeof globalThis.crypto?.randomUUID === 'function'
       ? globalThis.crypto.randomUUID()
-      : fallbackUuid();
+      : createUuid();
 
   return {
     id,
